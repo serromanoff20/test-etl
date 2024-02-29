@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  nginx:
+    image: 'bitnami/nginx:latest'
+    container_name: feif_nginx
+    restart: always
+    tty: true
+    networks:
+      - network
+    ports:
+      - '8222:8222'
+    volumes: 
+      - './docker/nginx/nginx.conf:/opt/bitnami/nginx/conf/server_blocks/my_server_block.conf:ro'
+      - './:/data'
+    depends_on:
+     - php83
+  php83:
+    image: 'bitnami/php-fpm:8.3.1'
+    container_name: feif_phpfpm
+    restart: always
+    tty: true
+    networks:
+      - network
+    volumes: 
+     - './docker/php/custom.ini:/opt/bitnami/php/etc/conf.d/custom.ini'
+     - './:/data'
+networks:
+  network:
+    driver: bridge
