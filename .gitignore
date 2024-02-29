@@ -1,0 +1,8 @@
+#idea and git
+.idea
+
+#vendor
+/vendor
+
+#files - into directiry
+/files/
