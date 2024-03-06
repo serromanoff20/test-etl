@@ -3,10 +3,13 @@
 include_once '/data/app/models/responses/Response.php';
 include_once '/data/app/models/Agency.php';
 include_once '/data/app/models/Excel.php';
+include_once '/data/app/models/MediatorToLoad.php';
 
 use app\models\responses\Response;
 use app\models\Agency;
 use app\models\Excel;
+use app\models\MediatorToLoad;
+use constants\Constants;
 use Exception;
 
 ini_set('error_reporting', E_ALL);
@@ -30,12 +33,73 @@ class MainController
 
             $id = !empty($id) ? (int)$id : null;
             if (is_null($id)) {
+
                 return $response->getSuccess($model->getAll());
-            } else {
-                return $response->getSuccess($model->getOne($id));
             }
+
+            $result = $model->getOne($id);
+            if (is_null($result) && $model->hasErrors()) {
+
+                return $response->getModelErrors($model->getErrors());
+            }
+
+            return $response->getSuccess($result);
         } catch (Exception $exception) {
 
+            return $response->getExceptionError($exception);
+        }
+    }
+    /**
+     * Gets one agency by local_id.
+     * @param string|null $local_id
+     *
+     * @return string
+     */
+    public function actionGetAgencyByLocalId(string $local_id): string
+    {
+        $response = new Response();
+
+        try {
+            $model = new Agency();
+
+            $local_id = !empty($local_id) ? (int)$local_id : null;
+            if (is_null($local_id)) {
+                return $response->getSuccess($model->getAll());
+            }
+            //todo: Возвратить модель обработчика ошибок
+            $result = $model->getByLocalId($local_id);
+            if (is_null($result)) {
+                return $response->getSuccess('');
+            }
+            return $response->getSuccess($result);
+        } catch (Exception $exception) {
+
+            return $response->getExceptionError($exception);
+        }
+    }
+
+    public function actionLoadingData(): string
+    {
+        $response = new Response();
+
+        try {
+            $modelLoad = new Excel();
+
+            if ($modelLoad->initFile()) {
+                $parsedData = $modelLoad->parser();
+
+                $modelMediator = new MediatorToLoad();
+
+                $forLoading = $modelMediator->toLoad($parsedData);
+                //todo: Возвратить модель обработчика ошибок
+                return $response->getSuccess($forLoading);
+
+//                if (is_null($forLoading)) {
+//                    return $response->getModelErrors($modelMediator->)
+//                }
+            }
+            //todo: Возвратить модель обработчика ошибок
+        } catch (Exception $exception) {
             return $response->getExceptionError($exception);
         }
     }
@@ -50,13 +114,7 @@ class MainController
         $response = new Response();
 
         try {
-            $modelLoad = new Excel();
-
-            $modelLoad->loading();
-
-            $modelLoad->parser();
-
-            return $response->getSuccess("ПРОВЕРКА");
+            return $response->getSuccess('CHECK');
         } catch (Exception $exception) {
             return $response->getExceptionError($exception);
         }

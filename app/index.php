@@ -21,20 +21,19 @@ class App
 
         if (
             ($_SERVER['REQUEST_METHOD'] === 'POST')
-            && isset($_FILES["fileToUpload"])
+            && isset($_FILES["file"])
         ) {
-            echo $controller->actionCheck();
-        } else if (isset($_GET['id'])) {
+            echo $controller->actionLoadingData();
+        } else if (isset($_GET['id']) || isset($_GET['local_id'])) {
             switch ($path[0]) {
                 case '/agency/one':
                     echo $controller->actionGetAgency($_GET['id']);
                     break;
+                case '/contacts/by-local-id':
+                    echo $controller->actionGetAgencyByLocalId($_GET['local_id']);
+                    break;
                 case '/contacts/one':
-//                    if (isset($_POST['key'])){
-//                        $controller->post($_POST['key']);
-//                    }else{
-                        echo $controller->actionSayHello('надо начинать писать следующий эндпоинт');
-//                    }
+                    echo $controller->actionSayHello('надо начинать писать следующий эндпоинт');
                     break;
                 default:
                     echo $controller->actionCheck();

@@ -1,21 +1,16 @@
 <?php namespace app\models\responses;
 
-include_once '/data/app/models/responses/DataResult.php';
+include_once '/data/app/models/responses/XMLFeed.php';
 include_once '/data/app/common/Constants.php';
+include_once '/data/app/models/ErrorModel.php';
 
-use app\models\responses\DataResult;
+use app\models\ErrorModel;
+use app\models\responses\XMLFeed as Feed;
 use constants\Constants;
 use Exception;
 
 class Response
 {
-    /**
-     * Resulting data set
-     *
-     * @var DataResult
-     */
-    public DataResult $response;
-
     /**
      * HTTP-code of response
      *
@@ -24,78 +19,70 @@ class Response
     public int $code;
 
     /**
+     * Resulting data set
+     *
+     * @var array
+     */
+    public array $response;
+
+    /**
      * Handler messages about success response
      * @param mixed $data
-     * @param int $code
      *
      * @return string
      */
-    public function getSuccess($data, int $code = 200): string
+    public function getSuccess($data): string
     {
         try {
-            $this->response = new DataResult((array)$data, Constants::SUCCESS_TYPE);
-            $this->code = $code;
+            $this->response = (array)$data;
+            $this->code = Constants::SUCCESS_CODE;
 
+//            return (new Feed())->toCreateFeed($this);
             return json_encode($this, JSON_UNESCAPED_UNICODE);
         } catch (Exception $exception) {
 
-            return $this->getExceptionError($exception, 203);
+            return $this->getExceptionError($exception, Constants::WARNING_CODE);
         }
     }
 
-//    /**
-//     * Получение массива сообщений об ошибках из ошибок модели
-//     *
-//     * @param array $errors
-//     * @param int $code
-//     * @return string
-//     */
-//    public function getModelErrors(array $errors, int $code = 500): string
-//    {
-//        try {
-//            $arrOut = [];
-//
-//            if (count($errors) === 0) {
-//                return json_encode([], JSON_UNESCAPED_UNICODE);
-//            }
-//
-//            foreach ($errors as $error_arr) {
-//                $error_arr = (gettype($error_arr) === 'array') ? $error_arr : array($error_arr);
-//
-//                $arrOut = array_merge($arrOut, $error_arr);
-//                $this->getError($arrOut, $code);
-//            }
-//
-//            $is_json = json_encode($this, JSON_UNESCAPED_UNICODE);
-//
-//            if (!$is_json) {
-//                return json_encode($this, JSON_THROW_ON_ERROR);
-//            }
-//
-//            return $is_json;
-//        } catch (Exception $exception) {
-//            return $this->getExceptionError($exception, $code);
-//        }
-//    }
+    /**
+     * Handler errors
+     * @param array $errors
+     *
+     * @return string
+     */
+    public function getModelErrors(array $errors): string
+    {
+        try {
+            $this->getError($errors);
 
-//    /**
-//     * Сообщение об ошибке
-//     * @param array $error
-//     * @param int $code
-//     *
-//     * @return void
-//     */
-//    protected function getError(array $error, int $code): void
-//    {
-//        $key_error = array_key_first($error);
-//        if (gettype($key_error) === 'string') {
-//            $this->response->message = $error[$key_error][0] . " - " . $key_error;
-//        } else {
-//            $this->response->data = $error;
-//        }
-//        $this->code = $code;
-////        $this->type = self::ERROR_TYPE;
-//    }
+            return (new Feed())->toCreateFeed($this);
+        } catch (Exception $exception) {
+            return $this->getExceptionError($exception);
+        }
+    }
+
+    /**
+     * Message about error
+     * @param array $errors
+     *
+     * @return void
+     */
+    private function getError(array $errors): void
+    {
+        $data = [];
+
+        if (count($errors) > 0) {
+            foreach($errors as $item) {
+                $data[] = $item;
+            }
+        } else if (count($errors) === 0) {
+            $data['message'] = "Ошибок не обноружено";
+        }
+
+        $this->response = $data;
+        $this->code = Constants::ERROR_CODE;
+    }
 
     /**
      * Handler Exception
@@ -104,11 +91,16 @@ class Response
      *
      * @return string
      */
-    public function getExceptionError(Exception $exception, int $code = 500): string
+    public function getExceptionError(Exception $exception, int $code = 0): string
     {
-        $this->response = new DataResult($exception->getTrace(), $exception->getMessage(), true);
-        $this->code = $code;
+        $data = [];
+        $data['message'] = $exception->getMessage();
+        $data['trace'] = $exception->getTrace();
 
+        $this->response = $data;
+        $this->code = ($code !== 0) ? $code : Constants::EXCEPTION_CODE;
         return json_encode($this, JSON_UNESCAPED_UNICODE);
+
+//        return (new Feed())->toCreateFeed($this);
     }
 }
