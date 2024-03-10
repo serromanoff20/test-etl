@@ -1,36 +1,18 @@
 <?php namespace app\models;
 
 include_once '/data/vendor/autoload.php';
+include_once '/data/app/common/Constants.php';
+include_once '/data/app/models/Model.php';
 
-use constants\Constants;
+use app\models\Model;
+use common\Constants;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-class Excel
+class Excel extends Model
 {
     public static string $_file;
 
-//    public function loading()
-//    {
-//        self::$_file = Constants::PATH_FILES . basename($_FILES["file"]["name"]);
-//        $uploadOk = 1;
-//        $fileType = strtolower(pathinfo(self::$_file, PATHINFO_EXTENSION));
-//
-//        if($fileType !== "xlsx") {
-//            echo "Только файлы с расширением XLSX разрешены.";
-//            $uploadOk = 0;
-//        }
-//
-//        if ($uploadOk === 0) {
-//            echo "Файл не был загружен.";
-//        } else {
-//            if (move_uploaded_file($_FILES["file"]["tmp_name"], self::$_file)) {
-//                echo "Файл ". basename( $_FILES["file"]["name"]). " успешно загружен.";
-//            } else {
-//                echo "Произошла ошибка при загрузке файла.";
-//            }
-//        }
-//    }
     public function initFile(): bool
     {
         self::$_file = Constants::PATH_FILES . basename($_FILES["file"]["name"]);
@@ -41,6 +23,7 @@ class Excel
                 return true;
             }
         }
+        $this->setError(get_called_class(), 'Не удалось распарсить файл');
         return false;
     }
 

@@ -1,4 +1,4 @@
-<?php namespace constants;
+<?php namespace common;
 
 class Constants
 {

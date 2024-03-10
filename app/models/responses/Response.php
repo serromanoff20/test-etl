@@ -6,7 +6,7 @@ include_once '/data/app/models/ErrorModel.php';
 
 use app\models\ErrorModel;
 use app\models\responses\XMLFeed as Feed;
-use constants\Constants;
+use common\Constants;
 use Exception;
 
 class Response
@@ -37,8 +37,7 @@ class Response
             $this->response = (array)$data;
             $this->code = Constants::SUCCESS_CODE;
 
-//            return (new Feed())->toCreateFeed($this);
-            return json_encode($this, JSON_UNESCAPED_UNICODE);
+            return (new Feed())->toCreateFeed($this);
         } catch (Exception $exception) {
 
             return $this->getExceptionError($exception, Constants::WARNING_CODE);
@@ -99,8 +98,7 @@ class Response
 
         $this->response = $data;
         $this->code = ($code !== 0) ? $code : Constants::EXCEPTION_CODE;
-        return json_encode($this, JSON_UNESCAPED_UNICODE);
 
-//        return (new Feed())->toCreateFeed($this);
+        return (new Feed())->toCreateFeed($this);
     }
 }

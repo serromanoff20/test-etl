@@ -47,12 +47,14 @@ class Agency extends Model
 
             return null;
         }
-        $row->fetch(PDO::FETCH_ASSOC);
+        $result = $row->fetch(PDO::FETCH_ASSOC);
 
-        $this->id = $row['id'];
-        $this->local_id = $row['local_id'];
-        $this->name = $row['name'];
+        $this->id = $result['id'];
+        $this->local_id = $result['local_id'];
+        $this->name = $result['name'];
 
+//        echo(gettype($result));
+//        echo(($row instanceof \PDOStatement) ? 'true' : 'false');
         return $this;
     }
 
@@ -64,7 +66,7 @@ class Agency extends Model
 
     public function toLoadDataInAgencyModel(array $id_and_name): array
     {
-        $result = null;
+        $result = [];
         $connect = new Connect();
         try {
             $stmt = $connect->connection->prepare("INSERT INTO agency (local_id, name) VALUES (?, ?)");
@@ -75,9 +77,9 @@ class Agency extends Model
                     $stmt->bindParam(1, $id);
                     $stmt->bindParam(2, $name);
 
-                    $result[$id] = $stmt->execute();
+                    $result[$id] = ($stmt->execute()) ? $this->getIdByLocalId($id) : false;
                 } else {
-                    $result[$id] = false;
+                    $result[$id] = $this->getIdByLocalId($id);
                 }
             }
         } catch (\PDOException $exception) {
@@ -93,8 +95,18 @@ class Agency extends Model
         $connect = new Connect();
         $row = $connect->connection->prepare("SELECT * FROM agency WHERE local_id = :local_id");
         $row->execute([':local_id' => $local_id]);
-        $red = $row->fetchAll();
+        $res = $row->fetchAll();
 
-        return !!$red;
+        return !!$res;
+    }
+
+    private function getIdByLocalId(string $local_id): int
+    {
+        $connect = new Connect();
+        $row = $connect->connection->prepare('SELECT id FROM agency WHERE local_id = :local_id');
+        $row->execute([':local_id' => $local_id]);
+        $res = $row->fetchAll(PDO::FETCH_ASSOC);
+
+        return $res[0]['id'];
     }
 }
