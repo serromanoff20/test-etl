@@ -1,9 +1,11 @@
 <?php namespace app\controllers;
 
 include_once '/data/app/models/Contact.php';
+include_once '/data/app/models/AllView.php';
 include_once '/data/app/models/responses/Response.php';
 
 use app\models\Contact;
+use app\models\AllView;
 use app\models\responses\Response;
 use Exception;
 
@@ -41,27 +43,55 @@ class ContactsController
         }
     }
 //in development++
-//    public function actionGetContactsByAgency(string $agency_id=null): string
-//    {
-//        $response = new Response();
-//
-//        try {
-//            if (is_null($agency_id)) {
-//                return $response->getModelErrors(['message' => "Неверно переданы параметры"]);
-//            }
-//
-//            $model = new Contact();
-//
-//            $result = $model->getByAgency($agency_id);
-//
-//            if(empty($result)) {
-//                return $response->getModelErrors($model->getErrors());
-//            }
-//
-//            return $response->getSuccess($result);
-//        } catch (Exception $exception) {
-//            return $response->getExceptionError($exception);
-//        }
-//    }
+    public function actionGetContactsByAgency(string $agency_id=null): string
+    {
+        $response = new Response();
+
+        try {
+            if (is_null($agency_id)) {
+                return $response->getModelErrors(['message' => "Неверно переданы параметры"]);
+            }
+
+            $model = new AllView();
+
+            $result = $model->getModelContactsByAgency($agency_id);
+
+            if(empty($result)) {
+                return $response->getModelErrors($model->getErrors());
+            }
+
+            return $response->getSuccess($result);
+        } catch (Exception $exception) {
+            return $response->getExceptionError($exception);
+        }
+    }
+
+    public function actionGetContactsByLocalIdAgency(string $local_id): string
+    {
+        $response = new Response();
+
+        try {
+            $modelAllView = new AllView();
+
+            $modelAllView->initIdContactsByLocalId($local_id);
+
+            if ($modelAllView->hasErrors() && !isset($modelAllView->id_contacts)) {
+
+                return $response->getModelErrors($modelAllView->getErrors());
+            } else {
+                $model = new Contact();
+
+                $result = $model->getOne($modelAllView->id_contacts);
+            }
+            if ($model->hasErrors()) {
+                return $response->getModelErrors($model->getErrors());
+            }
+
+            return $response->getSuccess($result);
+        } catch (Exception $exception) {
+
+            return $response->getExceptionError($exception);
+        }
+    }
 //in development--
 }

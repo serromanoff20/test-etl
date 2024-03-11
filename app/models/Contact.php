@@ -6,7 +6,7 @@ include_once '/data/app/models/Model.php';
 use app\models\Model;
 use app\db\Connect;
 use app\models\responses\Response;
-use constants\Constants;
+use common\Constants;
 use PDO;
 
 class Contact extends Model

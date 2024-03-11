@@ -1,8 +1,10 @@
 <?php namespace app\controllers;
 
 include_once '/data/app/models/Manager.php';
+include_once '/data/app/models/AllView.php';
 include_once '/data/app/models/responses/Response.php';
 
+use app\models\AllView;
 use app\models\Manager;
 use app\models\responses\Response;
 use Exception;
@@ -60,6 +62,34 @@ class ManagerController
 
             return $response->getSuccess($result);
         } catch (Exception $exception) {
+            return $response->getExceptionError($exception);
+        }
+    }
+
+    public function actionGetManagerByLocalIdAgency(string $local_id): string
+    {
+        $response = new Response();
+
+        try {
+            $modelAllView = new AllView();
+
+            $modelAllView->initIdManagerByLocalId($local_id);
+
+            if ($modelAllView->hasErrors() && !isset($modelAllView->id_manager)) {
+
+                return $response->getModelErrors($modelAllView->getErrors());
+            } else {
+                $model = new Manager();
+
+                $result = $model->getOne($modelAllView->id_manager);
+            }
+            if ($model->hasErrors()) {
+                return $response->getModelErrors($model->getErrors());
+            }
+
+            return $response->getSuccess($result);
+        } catch (Exception $exception) {
+
             return $response->getExceptionError($exception);
         }
     }

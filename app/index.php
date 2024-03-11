@@ -69,6 +69,9 @@ class App
                 case 'by-agency':
                     echo $controller->actionGetManagersByAgency($_GET['agency_id']);
                     break;
+                case 'by-local-id-agency':
+                    echo $controller->actionGetManagerByLocalIdAgency($_GET['local_id']);
+                    break;
 //                default:
 //                    echo(json_encode($_GET) . "\n"); //debugging
             }
@@ -88,6 +91,9 @@ class App
                 case 'by-agency':
                     echo $controller->actionGetContactsByAgency($_GET['agency_id']);
                     break;
+                case 'by-local-id-agency':
+                    echo $controller->actionGetContactsByLocalIdAgency($_GET['local_id']);
+                    break;
 //                default:
 //                    echo(json_encode($_GET) . "\n"); //debugging
             }
@@ -101,14 +107,26 @@ class App
                 case 'all':
                     echo $controller->actionGetEstate();
                     break;
+                case 'all-view':
+                    echo $controller->actionGetAllView();
+                    break;
                 case 'by-id':
                     echo $controller->actionGetEstate($_GET['id']);
                     break;
-//                case 'by-local-id':
-//                    echo $controller->actionGetEstateBy($_GET['local_id']);
-//                    break;
+                case 'by-agency':
+                    echo $controller->actionGetEstateByAgency($_GET['agency_id']);
+                    break;
+                case 'by-local-id-agency':
+                    echo $controller->actionGetEstateByLocalIdAgency($_GET['local_id']);
+                    break;
+                case 'by-contacts-id':
+                    echo $controller->actionGetEstateByContact($_GET['contact_id']);
+                    break;
+                case 'by-manager-id':
+                    echo $controller->actionGetEstateByManager($_GET['manager_id']);
+                    break;
 //                default:
-//                    echo $controller->actionCheck();
+//                    echo $controller->actionCheck(); //debugging
             }
         }
 
