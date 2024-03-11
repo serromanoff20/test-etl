@@ -1,8 +1,12 @@
 #idea and git
 .idea
+.git
 
 #vendor
 /vendor
 
 #files - into directiry
-#/files/
+/files/
+
+#env
+.env
