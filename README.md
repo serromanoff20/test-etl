@@ -13,9 +13,15 @@
 
 docker-compose up -d 
 
-docker-compose exec php83 composer require /data/phpoffice/phpspreadsheet
+docker-compose exec php83 composer require phpoffice/phpspreadsheet --working-dir=/data
 
-Корень проекта в docker-контейнире находиться в каталоге: /data
+docker-compose exec php83 composer require vlucas/phpdotenv --working-dir=/data
+
+Корень проекта в docker-контейнире находиться в каталоге: /data;
+
+После запуска докер-контейнера, необходимо настроить своё подключение в файле: /data/.env;
+
+Далее, после настройки подключения к БД, необходимо выполнить на сервере dump.sql-файл, который находиться в: /data/handbook/dump.sql;
 
 
 ___

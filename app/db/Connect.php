@@ -4,6 +4,9 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
+include_once '/data/vendor/autoload.php';
+
+use Dotenv\Dotenv;
 use PDO;
 
 class Connect
@@ -11,7 +14,9 @@ class Connect
   public object $connection;
 
   public function __construct() {
-        // Подключение драйвера mysql и коннект с сервером через PDO
-        $this->connection = new PDO('mysql:host=192.168.69.159;dbname=sarrc_test_db', 'pc', 'pc@1234');
+      $dotenv = Dotenv::createImmutable('/data/');
+      $dotenv->load();
+
+      $this->connection = new PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'] . '', $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
   }
 }
