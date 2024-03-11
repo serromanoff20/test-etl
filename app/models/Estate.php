@@ -43,27 +43,40 @@ class Estate extends Model
 
         return $this;
     }
-//
-//    public function getByLocalId(string $local_id): ?self
-//    {
-//        $connect = new Connect();
-//        $row = $connect->connection->prepare("SELECT * FROM agency WHERE local_id = :local_id");
-//        $row->bindValue(':local_id', $local_id);
-//        $row->execute();
-//
-//        if (!$row->execute()) {
-//            $this->setError(get_called_class(), "По local_id - " . $local_id . " агенство не найдено");
-//
-//            return null;
-//        }
-//        $row->fetch(PDO::FETCH_ASSOC);
-//
-//        $this->id = $row['id'];
-//        $this->local_id = $row['local_id'];
-//        $this->name = $row['name'];
-//
-//        return $this;
-//    }
+
+    public function getEstateByContacts(int $contact_id): array
+    {
+        $connect = new Connect();
+        $row = $connect->connection->prepare("SELECT * FROM estate WHERE contact_id = :contact_id");
+        $row->bindValue(':contact_id', $contact_id);
+        $row->execute();
+
+        $res = $row->fetchAll(PDO::FETCH_ASSOC);
+        if (!$res) {
+            $this->setError(get_called_class(), "По contact_id - " . $contact_id . " имущество не найдено");
+
+            return [];
+        }
+
+        return $res;
+    }
+
+    public function getEstateByManager(int $manager_id): array
+    {
+        $connect = new Connect();
+        $row = $connect->connection->prepare("SELECT * FROM estate WHERE manager_id = :manager_id");
+        $row->bindValue(':manager_id', $manager_id);
+        $row->execute();
+
+        $res = $row->fetchAll(PDO::FETCH_ASSOC);
+        if (!$res) {
+            $this->setError(get_called_class(), "По manager_id - " . $manager_id . " имущество не найдено");
+
+            return [];
+        }
+
+        return $res;
+    }
 
     public function getAll(): array
     {

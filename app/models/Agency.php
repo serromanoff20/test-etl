@@ -5,8 +5,6 @@ include_once '/data/app/models/Model.php';
 
 use app\models\Model;
 use app\db\Connect;
-use app\models\responses\Response;
-use constants\Constants;
 use PDO;
 
 class Agency extends Model

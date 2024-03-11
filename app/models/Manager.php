@@ -44,7 +44,7 @@ class Manager extends Model
 
         $res = $row->fetch(PDO::FETCH_ASSOC);
         if (!$res) {
-            $this->setError(get_called_class(), "По agency_id - " . $agency_id . " агенство не найдено");
+            $this->setError(get_called_class(), "По agency_id - " . $agency_id . " менеджеры не найдены");
 
             return [];
         }
