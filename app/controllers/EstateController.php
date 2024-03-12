@@ -174,4 +174,25 @@ class EstateController
             return $response->getExceptionError($exception);
         }
     }
+
+    public function actionGetEstateByManagerName(string $name): string
+    {
+        $response = new Response();
+
+        try {
+            $model = new AllView();
+
+            $result = $model->getEstateByManagerName($name);
+
+            if ($model->hasErrors()) {
+
+                return $response->getModelErrors($model->getErrors());
+            }
+
+            return $response->getSuccess($result);
+        } catch (Exception $exception) {
+
+            return $response->getExceptionError($exception);
+        }
+    }
 }

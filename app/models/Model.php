@@ -1,9 +1,7 @@
 <?php namespace app\models;
 
 include_once '/data/app/models/ErrorModel.php';
-//include_once '/data/app/models/Model.php';
-//
-//use app\models\Model;
+
 use app\models\ErrorModel;
 
 class Model
@@ -14,10 +12,6 @@ class Model
     {
         $error = new ErrorModel($placeError, $textError);
 
-//        if (!empty(self::$errors)) {
-//            print_r(self::$errors);
-//        }
-//        echo "\n";
         self::$errors = array_merge(self::$errors, [$error]);
     }
 

@@ -107,36 +107,20 @@ class AllView extends Model
         }
     }
 
-    public function getOneByContact(int $contact_id): array
+    public function getEstateByManagerName(string $name): array
     {
         $connect = new Connect();
-        $row = $connect->connection->prepare("SELECT * FROM all_view WHERE id_contacts = :contact_id");
-        $row->bindValue(':contact_id', $contact_id);
+        $row = $connect->connection->prepare("SELECT * FROM all_view WHERE name_manager = :name_manager");
+        $row->bindValue(':name_manager', $name);
         $row->execute();
 
-        $res = $row->fetch(PDO::FETCH_ASSOC);
+        $res = $row->fetchAll(PDO::FETCH_ASSOC);
         if (!$res) {
-            $this->setError(get_called_class(), "По contact_id - " . $contact_id . " объявление не найдено");
+            $this->setError(get_called_class(), "По manager_id - " . $name . " имущество не найдено");
 
             return [];
         }
+
         return $res;
     }
-
-    public function getOneByManager(int $manager_id): array
-    {
-        $connect = new Connect();
-        $row = $connect->connection->prepare("SELECT * FROM all_view WHERE id_manager = :manager_id");
-        $row->bindValue(':manager_id', $manager_id);
-        $row->execute();
-
-        $res = $row->fetch(PDO::FETCH_ASSOC);
-        if (!$res) {
-            $this->setError(get_called_class(), "По agency_id - " . $manager_id . " объявление не найдено");
-
-            return [];
-        }
-        return $res;
-    }
-
 }

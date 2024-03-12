@@ -4,6 +4,7 @@ include_once '/data/app/models/responses/Response.php';
 include_once '/data/app/models/Excel.php';
 include_once '/data/app/models/MediatorToLoad.php';
 
+use app\models\ErrorModel;
 use app\models\responses\Response;
 use app\models\Excel;
 use app\models\MediatorToLoad;
@@ -40,19 +41,10 @@ class MainController
         }
     }
 
-    public function actionSayHello(string $str): string
+    public function actionErrors(): string
     {
-        return '<h1>Привет, '.$str.'</h1>';
-    }
+        $errorModel = new ErrorModel(get_called_class(), 'Неверно составлен запрос');
 
-    public function actionCheck(): string
-    {
-        $response = new Response();
-
-        try {
-            return $response->getSuccess('CHECK');
-        } catch (Exception $exception) {
-            return $response->getExceptionError($exception);
-        }
+        return (new Response())->getModelErrors([$errorModel]);
     }
 }
