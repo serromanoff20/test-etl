@@ -39,20 +39,16 @@ port: 8222;
 После предварительных настроек, можно приступать к работе с самим сервисом:
 
 1) Для того что бы загрузить данные в БД, нужно сделать POST-запрос на эндпоинт - <br />http://localhost:8222/; с праметром "file";
-<br />
-ответ при успешной загрузке:
-<br />
-`<?xml version="1.0" encoding="UTF-8"?>
+<br />ответ при успешной загрузке:
+<br />`<?xml version="1.0" encoding="UTF-8"?>
 <feed version="1.0">
     <code>200</code>
     <response>
         <message>Данные загружены</message>
     </response>
 </feed>`
-<br />
-ответ при возникновениии ошибки:
-<br />
-`<?xml version="1.0" encoding="UTF-8"?>
+<br />ответ при возникновениии ошибки:
+<br />`<?xml version="1.0" encoding="UTF-8"?>
 <feed version="1.0">
     <code>500</code>
     <response>
