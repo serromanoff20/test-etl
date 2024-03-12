@@ -39,13 +39,13 @@ class Agency extends Model
         $row = $connect->connection->prepare("SELECT * FROM agency WHERE local_id = :local_id");
         $row->bindValue(':local_id', $local_id);
         $row->execute();
+        $result = $row->fetch(PDO::FETCH_ASSOC);
 
-        if (!$row->execute()) {
+        if (!$result) {
             $this->setError(get_called_class(), "По local_id - " . $local_id . " агенство не найдено");
 
             return null;
         }
-        $result = $row->fetch(PDO::FETCH_ASSOC);
 
         $this->id = $result['id'];
         $this->local_id = $result['local_id'];

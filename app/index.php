@@ -28,7 +28,7 @@ class App
         $path_to_action = isset($path[2]) ? explode("?", $path[2], 2) : null;
 
         if (
-            ($_SERVER['REQUEST_METHOD'] === 'POST')
+            $_SERVER['REQUEST_METHOD'] === 'POST'
             && isset($_FILES["file"])
         ) {
             echo (new MainController())->actionLoadingData();
@@ -50,8 +50,8 @@ class App
                 case 'by-local-id':
                     echo $controller->actionGetAgencyByLocalId($_GET['local_id']);
                     break;
-//                default:
-//                    echo(json_encode($_GET) . "\n"); //debugging
+                default:
+                    echo (new MainController())->actionErrors();
             }
         } elseif (
             ($_SERVER['REQUEST_METHOD'] === 'GET')
@@ -72,8 +72,8 @@ class App
                 case 'by-local-id-agency':
                     echo $controller->actionGetManagerByLocalIdAgency($_GET['local_id']);
                     break;
-//                default:
-//                    echo(json_encode($_GET) . "\n"); //debugging
+                default:
+                    echo (new MainController())->actionErrors();
             }
         } elseif (
             ($_SERVER['REQUEST_METHOD'] === 'GET')
@@ -94,8 +94,8 @@ class App
                 case 'by-local-id-agency':
                     echo $controller->actionGetContactsByLocalIdAgency($_GET['local_id']);
                     break;
-//                default:
-//                    echo(json_encode($_GET) . "\n"); //debugging
+                default:
+                    echo (new MainController())->actionErrors();
             }
         } elseif (
             ($_SERVER['REQUEST_METHOD'] === 'GET')
@@ -125,9 +125,14 @@ class App
                 case 'by-manager-id':
                     echo $controller->actionGetEstateByManager($_GET['manager_id']);
                     break;
-//                default:
-//                    echo $controller->actionCheck(); //debugging
+                case 'by-manager-name':
+                    echo $controller->actionGetEstateByManagerName($_GET['manager_name']);
+                    break;
+                default:
+                    echo (new MainController())->actionErrors();
             }
+        } else {
+            echo (new MainController())->actionErrors();
         }
 
         exit();

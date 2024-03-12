@@ -60,7 +60,7 @@ class AgencyController extends Controller
             }
             $result = $model->getByLocalId($local_id);
             if (is_null($result)) {
-                return $response->getSuccess('');
+                return $response->getModelErrors($model->getErrors());
             }
             return $response->getSuccess($result);
         } catch (Exception $exception) {
