@@ -46,71 +46,21 @@ port: 8222;
 
 2) Весь писок агенств(agency), по GET-запросу на эндпоинт - <br />http://localhost:8222/agency/all; без параметров;
 <br />ответ при успешной обработке запроса:
-<br />`<?xml version="1.0" encoding="UTF-8"?>
-<feed version="1.0">
-<code>200</code>
-<response>
-<item>
-<id>1</id>
-<local_id>УХ-1</local_id>
-<name>Горизонт</name>
-</item>
-<item>
-<id>2</id>
-<local_id>Янв-1</local_id>
-<name>Лидер</name>
-</item>
-...
-</response>
-</feed>`
+<br />`<?xml version="1.0" encoding="UTF-8"?><feed version="1.0"><code>200</code><response><item><id>1</id><local_id>УХ-1</local_id><name>Горизонт</name></item><item><id>2</id><local_id>Янв-1</local_id><name>Лидер</name></item>...</response></feed>`
 
 3) Фильтр конкретному агенства(agency), по GET-запросу на эндпоинт - <br />http://localhost:8222/agency/by-local-id?local_id=янв-1;
 <br />
 ответ при успешной обработке запроса:
 <br />
-`<?xml version="1.0" encoding="UTF-8"?>
-<feed version="1.0">
-<code>200</code>
-<response>
-<id>2</id>
-<local_id>Янв-1</local_id>
-<name>Лидер</name>
-</response>
-</feed>`
+`<?xml version="1.0" encoding="UTF-8"?><feed version="1.0"><code>200</code><response><id>2</id><local_id>Янв-1</local_id><name>Лидер</name></response></feed>`
    <br />ответ при возникновениии ошибки:
-   <br />`<?xml version="1.0" encoding="UTF-8"?>
-<feed version="1.0">
-<code>500</code>
-<response>
-<error>
-<place>app\models\Agency</place>
-<message>По local_id - янв агенство не найдено</message>
-</error>
-</response>
-</feed>`
+   <br />`<?xml version="1.0" encoding="UTF-8"?><feed version="1.0"><code>500</code><response><error><place>app\models\Agency</place><message>По local_id - янв агенство не найдено</message></error></response></feed>`
 
 4) Фильтр конкретного агенства(agency) по уникальному id, по GET-запросу на эндпоинт - <br />http://localhost:8222/agency/by-id?id=2
 <br />ответ при успешной обработке запроса:
-<br />`<?xml version="1.0" encoding="UTF-8"?>
-<feed version="1.0">
-<code>200</code>
-<response>
-<id>2</id>
-<local_id>Янв-1</local_id>
-<name>Лидер</name>
-</response>
-</feed>`
+<br />`<?xml version="1.0" encoding="UTF-8"?><feed version="1.0"><code>200</code><response><id>2</id><local_id>Янв-1</local_id><name>Лидер</name></response></feed>`
 <br />ответ при возникновениии ошибки:
-<br />`<?xml version="1.0" encoding="UTF-8"?>
-<feed version="1.0">
-<code>500</code>
-<response>
-<error>
-<place>app\models\Agency</place>
-<message>По id - 100 агенство не найдено</message>
-</error>
-</response>
-</feed>`
+<br />`<?xml version="1.0" encoding="UTF-8"?><feed version="1.0"><code>500</code><response><error><place>app\models\Agency</place><message>По id - 100 агенство не найдено</message></error></response></feed>`
 
 5) Весь список контактов с продавцами(contacts), по GET-запросу на эндпоинт - <br />http://localhost:8222/contacts/all; без параметров;
 <br />ответ при успешной обработке запроса:
