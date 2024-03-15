@@ -42,15 +42,7 @@ port: 8222;
 <br />ответ при успешной загрузке:
 <br />`<?xml version="1.0" encoding="UTF-8"?><feed version="1.0"><code>200</code><response><message>Данные загружены</message></response></feed>`
 <br />ответ при возникновениии ошибки:
-<br />`<?xml version="1.0" encoding="UTF-8"?><feed version="1.0">
-<code>500</code>
-<response>
-<error>
-<place>app\controllers\MainController</place>
-<message>Неверно составлен запрос</message>
-</error>
-</response>
-</feed>`   
+<br />`<?xml version="1.0" encoding="UTF-8"?><feed version="1.0"><code>500</code><response><error><place>app\controllers\MainController</place><message>Неверно составлен запрос</message></error></response></feed>`   
 
 2) Весь писок агенств(agency), по GET-запросу на эндпоинт - <br />http://localhost:8222/agency/all; без параметров;
 <br />ответ при успешной обработке запроса:
